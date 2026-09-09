@@ -82,3 +82,25 @@ class VerticalLimit:
             return VerticalLimit(self.value * 3.28084, VerticalUnit.FT, self.reference)
         elif self.unit == VerticalUnit.FL:
             return VerticalLimit(self.value * 100, VerticalUnit.FT, self.reference)
+
+@dataclass
+class Zone:
+    """Airspace zone polygon uses coordinate order (longitude, latitude).many geospatial libraries and formats use coordinates in lon, lat order:"""
+    id: str
+    name: str
+    zone_type: ZoneType
+    lower: VerticalLimit
+    upper: VerticalLimit
+    polygon: list[tuple[float, float]]
+    source: str
+    activation_status: ActivationStatus # some restricted/danger areas are not active all the time. They may only apply during certain hours, by NOTAM, or when activated for a specific operation.
+
+@dataclass
+class AirspaceAlert:
+    aircraft: Aircraft
+    zone: Zone
+    alert_type: AlertType
+    verification_status: VerificationStatus
+    data_quality: DataQuality
+    distance_to_boundary_m: float | None
+    reason: str    

@@ -1,5 +1,4 @@
 from sa_engine import models
-from sa_engine.altitude import can_compare
 
 aircraft = models.Aircraft(
     icao24="abc123",
@@ -18,25 +17,41 @@ aircraft = models.Aircraft(
 )
 
 
-limit_fl = models.VerticalLimit(
-    65,
-    models.VerticalUnit.FL,
-    models.VerticalReference.STANDARD_PRESSURE,
+zone = models.Zone(
+    id="demo-zone-1",
+    name="Synthetic Danger Area",
+    zone_type=models.ZoneType.DANGER,
+    lower=models.VerticalLimit(
+        1000,
+        models.VerticalUnit.FT,
+        models.VerticalReference.MSL,
+    ),
+    upper=models.VerticalLimit(
+        65,
+        models.VerticalUnit.FL,
+        models.VerticalReference.STANDARD_PRESSURE,
+    ),
+    polygon=[
+        (24.90, 60.10),
+        (25.00, 60.10),
+        (25.00, 60.20),
+        (24.90, 60.20),
+    ],
+    source="synthetic",
+    activation_status=models.ActivationStatus.UNKNOWN,
 )
 
-limit_msl = models.VerticalLimit(
-    5000,
-    models.VerticalUnit.FT,
-    models.VerticalReference.MSL,
+print(zone)
+
+
+alert = models.AirspaceAlert(
+    aircraft=aircraft,
+    zone=zone,
+    alert_type=models.AlertType.DANGER_AREA_EXPOSURE,
+    verification_status=models.VerificationStatus.POTENTIAL,
+    data_quality=models.DataQuality.OK,
+    distance_to_boundary_m=None,
+    reason="Synthetic test alert",
 )
 
-limit_agl = models.VerticalLimit(
-    500,
-    models.VerticalUnit.FT,
-    models.VerticalReference.AGL,
-)
-
-
-print(can_compare(aircraft, limit_fl))
-print(can_compare(aircraft, limit_msl))
-print(can_compare(aircraft, limit_agl))
+print(alert)
