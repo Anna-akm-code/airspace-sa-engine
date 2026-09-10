@@ -28,3 +28,15 @@ The system uses:
 - `PROHIBITED_AREA_ENTRY`
 - `RESTRICTED_AREA_ENTRY`
 - `DANGER_AREA_EXPOSURE`
+
+
+## ADR-007 — Use `covers()` for horizontal containment
+
+**Decision:**  
+Use Shapely `covers()` rather than `contains()` when checking whether an aircraft position lies within an airspace polygon.
+
+**Why:**  
+`contains()` excludes points exactly on the polygon boundary. For situational awareness, treating an aircraft exactly on a published boundary as outside could hide a relevant situation.
+
+**Consequence:**  
+Aircraft exactly on the zone boundary are treated as horizontally contained and continue through the alert logic. This behavior is protected by an automated test.
