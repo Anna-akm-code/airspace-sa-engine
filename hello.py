@@ -1,4 +1,6 @@
+
 from sa_engine import models
+from sa_engine.geometry import find_alerts
 
 aircraft = models.Aircraft(
     icao24="abc123",
@@ -15,7 +17,6 @@ aircraft = models.Aircraft(
     position_source=0,
     category=3,
 )
-
 
 zone = models.Zone(
     id="demo-zone-1",
@@ -41,17 +42,8 @@ zone = models.Zone(
     activation_status=models.ActivationStatus.UNKNOWN,
 )
 
-print(zone)
-
-
-alert = models.AirspaceAlert(
-    aircraft=aircraft,
-    zone=zone,
-    alert_type=models.AlertType.DANGER_AREA_EXPOSURE,
-    verification_status=models.VerificationStatus.POTENTIAL,
-    data_quality=models.DataQuality.OK,
-    distance_to_boundary_m=None,
-    reason="Synthetic test alert",
+find_alerts(
+    aircraft,
+    [zone],
+    now=1757410210,
 )
-
-print(alert)
