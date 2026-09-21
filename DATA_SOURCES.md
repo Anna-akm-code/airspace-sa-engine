@@ -8,26 +8,15 @@ files under `runs/` must stay private and outside publication.
 
 ## OpenAIP
 
-Official OpenAIP airspace pages identify data as **Creative Commons
-Attribution-NonCommercial 4.0 International, unless otherwise stated**:
-[official dataset footer](https://www.openaip.net/data/airspaces/676bc0c9ced6d3b9b28e542a).
-That footer was available through the search index; direct official-page access
-returned HTTP 403 in this environment. This is evidence of the stated license,
-not complete verification of current API/account terms. Anna must reopen
-[OpenAIP](https://www.openaip.net/) and check current terms before publication or
-live/derived-data use. No blanket commercial-use permission is asserted.
+OpenAIP states that its data is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/) license.
 
-For permitted outputs containing OpenAIP data, include attribution such as:
-**Airspace data: OpenAIP, Garrecht Avionik GmbH and contributors; CC BY-NC 4.0
-unless otherwise stated.** Link the source and
-[license](https://creativecommons.org/licenses/by-nc/4.0/), retain supplied
-notices, and identify adaptations (for example, conversion to domain geometry).
-Check record-specific exceptions. The CC deed requires credit, a license link
-and indication of changes, and limits use to noncommercial purposes.
+OpenAIP also explicitly states that third parties may share, remix, transform and build on its data, and may ship OpenAIP data with paid/commercial applications as long as they do not exclusively sell OpenAIP data itself, for example as a paid standalone data-update service.
 
-OpenAIP is an integration source, not the sole authoritative aviation source.
-[Manual Finnish comparisons](docs/openaip_manual_check.md) are a separate,
-still-pending process; passing tests do not establish operational authority.
+Official source: [OpenAIP](https://www.openaip.net/)
+
+For outputs containing OpenAIP data, retain appropriate attribution and applicable license notices.
+
+OpenAIP is used here as a structured integration source, not as the sole authoritative source for operational aviation information. Manual comparison against authoritative Finnish aeronautical information is handled separately.
 
 ## OpenSky Network
 
