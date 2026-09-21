@@ -7,11 +7,7 @@ observations into explainable situational-awareness alerts. It demonstrates
 provider integration, deterministic geospatial rules, explicit uncertainty,
 and a small shared map of observations and results. It is not operational aviation software.
 
-**SYNTHETIC DEMO screenshot pending.** [Capture instructions](docs/assets/README.md)
-use only the invented scenario. Intended image: `docs/assets/synthetic-demo.png`.
-<!-- Replace the pending note after capture with:
-![SYNTHETIC DEMO: invented aircraft, airspaces and alerts](docs/assets/synthetic-demo.png)
--->
+![Airspace SA Engine synthetic demo](docs/assets/airspace-sa-demo.png)
 
 ## What it does
 
