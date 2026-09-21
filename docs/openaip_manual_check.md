@@ -1,7 +1,8 @@
 # Manual Finnish airspace sanity check
 
-Status: PENDING. No live OpenAIP or authoritative comparison was performed for
-Chunks B/C. Automated tests use fake HTTP responses and do not validate live data.
+Status: Three manual record comparisons recorded below, as reported by the
+reviewer. This is a small manual sanity check, not exhaustive validation.
+Automated tests use fake HTTP responses and do not validate live data.
 
 1. Set OPENAIP_API_KEY in your environment or local .env (already gitignored).
    Never paste the key into source, command arguments, screenshots or reports.
@@ -24,19 +25,58 @@ Chunks B/C. Automated tests use fake HTTP responses and do not validate live dat
 OpenAIP is not authoritative. Do not label a zone verified until the comparison
 has actually been performed. Preserve discrepancies for investigation.
 
-| Field | Zone 1 | Zone 2 | Zone 3 |
-| --- | --- | --- | --- |
-| OpenAIP ID / name | pending | pending | pending |
-| OpenAIP retrieval UTC | | | |
-| Authoritative source URL / section / chart | | | |
-| Source effective / retrieval date | | | |
-| Identifier / name comparison | | | |
-| P/R/D type comparison | | | |
-| Lower: value / unit / reference | | | |
-| Upper: value / unit / reference or unlimited | | | |
-| Broad footprint, parts and holes | | | |
-| Discrepancies / unresolved questions | | | |
-| Reviewer / comparison date / result | pending | pending | pending |
+## Recorded manual comparisons
+
+These reviewer-reported checks cover three records only. They do not validate
+all Finnish OpenAIP data or establish OpenAIP as authoritative. Official Finnish
+aeronautical information remains the authoritative reference for operational use.
+
+OpenAIP's `0 ft GND` representation is recorded separately from the official
+source's `SFC` wording. The comparisons below do not change domain altitude
+reference semantics. Precise geometry, broad geographic footprint, polygon parts
+and holes were not reported as checked; no geometry validation is claimed.
+
+### EFP10 LOVIISA
+
+| Field | OpenAIP | Authoritative Finnish source |
+| --- | --- | --- |
+| Designation / name | EFP10 LOVIISA | EFP10 LOVIISA |
+| Type | prohibited | Prohibited-area designation EFP10 |
+| Lower limit | 0 ft GND (surface representation) | SFC |
+| Upper limit | FL65 | FL65 |
+| Activity type | Not recorded in this comparison | NUCLEAR |
+| Activity time | Not recorded in this comparison | H24 |
+
+Result: consistent for designation/type and vertical limits checked.
+Activity details above are recorded from the official source; no comparison of
+OpenAIP activation handling was reported.
+
+### EFR100
+
+| Field | OpenAIP | Authoritative Finnish source |
+| --- | --- | --- |
+| Designation / name | EFR100 | EFR100 / IT?INEN RAJOITUSALUE |
+| Type | restricted | restricted |
+| Lower limit | 0 ft GND (surface representation) | SFC |
+| Upper limit | FL280 | FL280 |
+
+Result: consistent for type and vertical limits checked.
+
+### EFD100 KATAJALUOTO
+
+| Field | OpenAIP | Authoritative Finnish source |
+| --- | --- | --- |
+| Designation / name | EFD100 KATAJALUOTO | EFD100 KATAJALUOTO |
+| Type | danger | Danger-area designation EFD100 |
+| Lower limit | 0 ft GND (surface representation) | SFC |
+| Upper limit | UNLIMITED | UNL |
+
+Result: consistent for designation/type and vertical limits checked.
+
+Exact official source URLs/sections, source effective dates, retrieval dates,
+reviewer identity and comparison dates were not supplied with these results.
+They remain unrecorded; no dates or citations have been inferred. These checks
+do not establish current activation, operational suitability or legal infringement.
 
 ## Client assumptions and failures
 
