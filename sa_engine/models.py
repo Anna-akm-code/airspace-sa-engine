@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from enum import Enum
 
+from shapely.geometry import MultiPolygon, Polygon
+
 
 class VerticalUnit(Enum):
     FT = "ft"
@@ -71,30 +73,76 @@ class Aircraft:
 
 @dataclass
 class VerticalLimit:
-    value: float
-    unit: VerticalUnit
-    reference: VerticalReference
+    value: float | None
+    unit: VerticalUnit | None
+    reference: VerticalReference | None
+    unlimited: bool = False
+
+    #__post_init__() is automatically called by a dataclass immediately after construction.
+    def __post_init__(self):
+        if self.unlimited:
+            if (
+                self.value is not None
+                or self.unit is not None
+                or self.reference is not None
+            ):
+                raise ValueError(
+                    "Unlimited vertical limit must not have value, unit, or reference"
+                )
+        else:
+            if (
+                self.value is None
+                or self.unit is None
+                or self.reference is None
+            ):
+                raise ValueError(
+                    "Finite vertical limit requires value, unit, and reference"
+                )
 
     def to_feet(self):
+        if self.unlimited:
+            return self
+
         if self.unit == VerticalUnit.FT:
             return VerticalLimit(self.value, VerticalUnit.FT, self.reference)
+
         elif self.unit == VerticalUnit.M:
-            return VerticalLimit(self.value * 3.28084, VerticalUnit.FT, self.reference)
+            return VerticalLimit(
+                self.value * 3.28084,
+                VerticalUnit.FT,
+                self.reference,
+            )
+
         elif self.unit == VerticalUnit.FL:
-            return VerticalLimit(self.value * 100, VerticalUnit.FT, self.reference)
+            return VerticalLimit(
+                self.value * 100,
+                VerticalUnit.FT,
+                self.reference,
+            )
 
 @dataclass
 class Zone:
-    """Airspace zone polygon uses coordinate order (longitude, latitude).many geospatial libraries and formats use coordinates in lon, lat order:"""
+    """Polygonal footprint in (longitude, latitude), preserving holes and parts.
+
+    Legacy coordinate lists are normalized to Polygon at construction.
+    """
     id: str
     name: str
     zone_type: ZoneType
     lower: VerticalLimit
     upper: VerticalLimit
-    polygon: list[tuple[float, float]]
+    polygon: Polygon | MultiPolygon | list[tuple[float, float]]
     source: str
     activation_status: ActivationStatus # some restricted/danger areas are not active all the time. They may only apply during certain hours, by NOTAM, or when activated for a specific operation.
-
+    def __post_init__(self):
+        if self.lower.unlimited:
+            raise ValueError("Zone lower boundary cannot be unlimited")
+        if isinstance(self.polygon, list):
+            self.polygon = Polygon(self.polygon)
+        if not isinstance(self.polygon, (Polygon, MultiPolygon)):
+            raise ValueError("Zone geometry must be Polygon or MultiPolygon")
+        if self.polygon.is_empty or not self.polygon.is_valid:
+            raise ValueError("Zone geometry must be valid and nonempty")
 @dataclass
 class AirspaceAlert:
     aircraft: Aircraft

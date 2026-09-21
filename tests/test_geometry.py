@@ -192,3 +192,106 @@ def test_msl_zone_creates_potential_alert(
 
     assert len(alerts) == 1
     assert alerts[0].verification_status is models.VerificationStatus.POTENTIAL
+
+
+def test_aircraft_inside_zone_with_unlimited_upper_boundary():
+    aircraft = models.Aircraft(
+        icao24="abc123",
+        callsign="TEST",
+        lat=60.5,
+        lon=24.5,
+        baro_altitude_ft=50000,
+        geo_altitude_ft=None,
+        velocity=None,
+        heading=None,
+        on_ground=False,
+        time_position=1000,
+        last_contact=1000,
+        position_source=0,
+        category=None,
+    )
+
+    zone = models.Zone(
+        id="unlimited-zone",
+        name="Unlimited Restricted Zone",
+        zone_type=models.ZoneType.RESTRICTED,
+        lower=models.VerticalLimit(
+            value=0,
+            unit=models.VerticalUnit.FT,
+            reference=models.VerticalReference.GND,
+        ),
+        upper=models.VerticalLimit(
+            value=None,
+            unit=None,
+            reference=None,
+            unlimited=True,
+        ),
+        polygon=[
+            (24.0, 60.0),
+            (25.0, 60.0),
+            (25.0, 61.0),
+            (24.0, 61.0),
+        ],
+        source="test",
+        activation_status=models.ActivationStatus.ACTIVE,
+    )
+
+    alerts = find_alerts(
+        aircraft=aircraft,
+        zones=[zone],
+        now=1000,
+    )
+
+    assert len(alerts) == 1
+    assert alerts[0].verification_status is models.VerificationStatus.CONFIRMED
+    assert alerts[0].data_quality is models.DataQuality.OK    
+
+def test_aircraft_below_lower_boundary_of_unlimited_zone_has_no_alert():
+    aircraft = models.Aircraft(
+        icao24="abc123",
+        callsign="TEST",
+        lat=60.5,
+        lon=24.5,
+        baro_altitude_ft=1000,
+        geo_altitude_ft=None,
+        velocity=None,
+        heading=None,
+        on_ground=False,
+        time_position=1000,
+        last_contact=1000,
+        position_source=0,
+        category=None,
+    )
+
+    zone = models.Zone(
+        id="unlimited-zone",
+        name="Unlimited Restricted Zone",
+        zone_type=models.ZoneType.RESTRICTED,
+        lower=models.VerticalLimit(
+            value=2000,
+            unit=models.VerticalUnit.FT,
+            reference=models.VerticalReference.STANDARD_PRESSURE,
+        ),
+        upper=models.VerticalLimit(
+            value=None,
+            unit=None,
+            reference=None,
+            unlimited=True,
+        ),
+        polygon=[
+            (24.0, 60.0),
+            (25.0, 60.0),
+            (25.0, 61.0),
+            (24.0, 61.0),
+        ],
+        source="test",
+        activation_status=models.ActivationStatus.ACTIVE,
+    )
+
+    alerts = find_alerts(
+        aircraft=aircraft,
+        zones=[zone],
+        now=1000,
+    )
+
+    assert alerts == []

@@ -1,4 +1,4 @@
-from shapely.geometry import Point, Polygon
+from shapely.geometry import Point
 
 from .altitude import can_compare
 from .models import (
@@ -11,6 +11,7 @@ from .models import (
     Zone,
     ZoneType,
 )
+from .projection import distance_to_boundary_m
 
 
 def find_alerts(
@@ -37,10 +38,8 @@ def find_alerts(
     point = Point(aircraft.lon, aircraft.lat)
 
     for zone in zones:
-        shapely_polygon = Polygon(zone.polygon)
-
         # 1. Horizontal containment
-        if not shapely_polygon.covers(point):
+        if not zone.polygon.covers(point):
             continue
 
         # 2. Choose alert type based on zone type
@@ -53,13 +52,18 @@ def find_alerts(
 
         # 3. Check whether vertical limits can be compared
         lower_result = can_compare(aircraft, zone.lower)
-        upper_result = can_compare(aircraft, zone.upper)
+        upper_result = None
+        if not zone.upper.unlimited:
+            upper_result = can_compare(aircraft, zone.upper)
 
         # 4. UNKNOWN: report horizontal containment,
         # but do not pretend we know vertical containment
         if (
             lower_result is Comparability.UNKNOWN
-            or upper_result is Comparability.UNKNOWN
+            or (
+                not zone.upper.unlimited
+                and upper_result is Comparability.UNKNOWN
+            )
         ):
             if aircraft.baro_altitude_ft is None:
                 data_quality = DataQuality.NO_ALTITUDE
@@ -87,16 +91,24 @@ def find_alerts(
 
          # From here on, barometric altitude exists and comparison is possible
         lower_ft = zone.lower.to_feet().value
-        upper_ft = zone.upper.to_feet().value
         aircraft_altitude = aircraft.baro_altitude_ft
 
+        upper_ft = None
+        if not zone.upper.unlimited:
+            upper_ft = zone.upper.to_feet().value
+
          # 5. Vertical containment
-        if not lower_ft <= aircraft_altitude <= upper_ft:
+        if aircraft_altitude < lower_ft:
+            continue
+        if not zone.upper.unlimited and aircraft_altitude > upper_ft:
             continue
         # 6. Approximate comparison
         if (
             lower_result is Comparability.APPROXIMATE
-            or upper_result is Comparability.APPROXIMATE
+            or (
+                not zone.upper.unlimited
+                and upper_result is Comparability.APPROXIMATE
+            )
         ):
             alerts.append(
                 AirspaceAlert(
@@ -124,4 +136,9 @@ def find_alerts(
                 )
             )
 
+    # Enrich only actual alerts, including those with unknown vertical containment.
+    for alert in alerts:
+        alert.distance_to_boundary_m = distance_to_boundary_m(
+            alert.zone.polygon, aircraft.lon, aircraft.lat,
+        )
     return alerts

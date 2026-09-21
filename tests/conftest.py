@@ -320,3 +320,17 @@ def aircraft_missing_position():
         position_source=0,
         category=3,
     )
+
+@pytest.fixture(autouse=True)
+def offline_test_environment(monkeypatch):
+    """Tests must never use the developer's credentials or live requests transport."""
+    import requests
+
+    for name in ('OPENAIP_API_KEY', 'OPENSKY_CLIENT_ID', 'OPENSKY_CLIENT_SECRET'):
+        monkeypatch.delenv(name, raising=False)
+    monkeypatch.setenv('PYTHON_DOTENV_DISABLED', '1')
+
+    def blocked(*args, **kwargs):
+        raise AssertionError('Live HTTP is forbidden in the offline test suite')
+
+    monkeypatch.setattr(requests.sessions.Session, 'request', blocked)

@@ -103,3 +103,103 @@ def test_ground_limit_is_comparable(aircraft_inside):
     result = can_compare(aircraft_inside, limit)
 
     assert result is models.Comparability.COMPARABLE
+
+
+
+def test_unlimited_vertical_limit_is_valid():
+    limit = models.VerticalLimit(
+        value=None,
+        unit=None,
+        reference=None,
+        unlimited=True,
+    )
+
+    assert limit.unlimited is True
+
+
+def test_unlimited_vertical_limit_rejects_numeric_metadata():
+    with pytest.raises(
+        ValueError,
+        match="Unlimited vertical limit must not have value, unit, or reference",
+    ):
+        models.VerticalLimit(
+            value=999,
+            unit=models.VerticalUnit.FL,
+            reference=models.VerticalReference.STANDARD_PRESSURE,
+            unlimited=True,
+        )
+
+
+def test_finite_vertical_limit_requires_complete_metadata():
+    with pytest.raises(
+        ValueError,
+        match="Finite vertical limit requires value, unit, and reference",
+    ):
+       models. VerticalLimit(
+            value=3500,
+            unit=None,
+            reference=models.VerticalReference.MSL,
+        )
+
+def test_zone_rejects_unlimited_lower_boundary():
+    lower = models.VerticalLimit(
+        value=None,
+        unit=None,
+        reference=None,
+        unlimited=True,
+    )
+
+    upper = models.VerticalLimit(
+        value=5000,
+        unit=models.VerticalUnit.FT,
+        reference=models.VerticalReference.MSL,
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="Zone lower boundary cannot be unlimited",
+    ):
+        models.Zone(
+            id="test-zone",
+            name="Test Zone",
+            zone_type=models.ZoneType.RESTRICTED,
+            lower=lower,
+            upper=upper,
+            polygon=[(24.0, 60.0), (25.0, 60.0), (25.0, 61.0)],
+            source="test",
+            activation_status=models.ActivationStatus.ACTIVE,
+        )
+
+def test_zone_allows_unlimited_upper_boundary():
+    lower = models.VerticalLimit(
+        value=0,
+        unit=models.VerticalUnit.FT,
+        reference=models.VerticalReference.GND,
+    )
+
+    upper = models.VerticalLimit(
+        value=None,
+        unit=None,
+        reference=None,
+        unlimited=True,
+    )
+
+    zone = models.Zone(
+        id="test-zone",
+        name="Test Zone",
+        zone_type=models.ZoneType.RESTRICTED,
+        lower=lower,
+        upper=upper,
+        polygon=[
+            (24.0, 60.0),
+            (25.0, 60.0),
+            (25.0, 61.0),
+        ],
+        source="test",
+        activation_status=models.ActivationStatus.ACTIVE,
+    )
+
+    assert zone.upper.unlimited is True
+    assert zone.upper.value is None
+    assert zone.upper.unit is None
+    assert zone.upper.reference is None

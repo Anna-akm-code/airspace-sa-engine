@@ -1,0 +1,288 @@
+[
+  {
+    "_id": "synthetic-1",
+    "name": "EFR SYNTHETIC",
+    "type": 1,
+    "country": "FI",
+    "lowerLimit": {
+      "value": 0,
+      "unit": 1,
+      "referenceDatum": 0
+    },
+    "upperLimit": {
+      "value": 3500,
+      "unit": 1,
+      "referenceDatum": 1
+    },
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            24,
+            60
+          ],
+          [
+            26,
+            60
+          ],
+          [
+            26,
+            62
+          ],
+          [
+            24,
+            62
+          ],
+          [
+            24,
+            60
+          ]
+        ],
+        [
+          [
+            24.5,
+            60.5
+          ],
+          [
+            25.5,
+            60.5
+          ],
+          [
+            25.5,
+            61.5
+          ],
+          [
+            24.5,
+            61.5
+          ],
+          [
+            24.5,
+            60.5
+          ]
+        ]
+      ]
+    }
+  },
+  {
+    "_id": "synthetic-2",
+    "name": "EFD SYNTHETIC",
+    "type": 2,
+    "country": "FI",
+    "lowerLimit": {
+      "value": 0,
+      "unit": 1,
+      "referenceDatum": 0
+    },
+    "upperLimit": {
+      "value": 3500,
+      "unit": 1,
+      "referenceDatum": 1
+    },
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            24,
+            60
+          ],
+          [
+            26,
+            60
+          ],
+          [
+            26,
+            62
+          ],
+          [
+            24,
+            62
+          ],
+          [
+            24,
+            60
+          ]
+        ],
+        [
+          [
+            24.5,
+            60.5
+          ],
+          [
+            25.5,
+            60.5
+          ],
+          [
+            25.5,
+            61.5
+          ],
+          [
+            24.5,
+            61.5
+          ],
+          [
+            24.5,
+            60.5
+          ]
+        ]
+      ]
+    }
+  },
+  {
+    "_id": "synthetic-3",
+    "name": "EFP SYNTHETIC",
+    "type": 3,
+    "country": "FI",
+    "lowerLimit": {
+      "value": 0,
+      "unit": 1,
+      "referenceDatum": 0
+    },
+    "upperLimit": {
+      "value": 3500,
+      "unit": 1,
+      "referenceDatum": 1
+    },
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            24,
+            60
+          ],
+          [
+            26,
+            60
+          ],
+          [
+            26,
+            62
+          ],
+          [
+            24,
+            62
+          ],
+          [
+            24,
+            60
+          ]
+        ],
+        [
+          [
+            24.5,
+            60.5
+          ],
+          [
+            25.5,
+            60.5
+          ],
+          [
+            25.5,
+            61.5
+          ],
+          [
+            24.5,
+            61.5
+          ],
+          [
+            24.5,
+            60.5
+          ]
+        ]
+      ]
+    }
+  },
+  {
+    "_id": "synthetic-multi",
+    "name": "EFD SYNTHETIC UNLIMITED",
+    "type": 2,
+    "country": "FI",
+    "lowerLimit": {
+      "value": 0,
+      "unit": 1,
+      "referenceDatum": 0
+    },
+    "upperLimit": {
+      "value": 999,
+      "unit": 6,
+      "referenceDatum": 2
+    },
+    "geometry": {
+      "type": "MultiPolygon",
+      "coordinates": [
+        [
+          [
+            [
+              24,
+              60
+            ],
+            [
+              26,
+              60
+            ],
+            [
+              26,
+              62
+            ],
+            [
+              24,
+              62
+            ],
+            [
+              24,
+              60
+            ]
+          ],
+          [
+            [
+              24.5,
+              60.5
+            ],
+            [
+              25.5,
+              60.5
+            ],
+            [
+              25.5,
+              61.5
+            ],
+            [
+              24.5,
+              61.5
+            ],
+            [
+              24.5,
+              60.5
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              27,
+              60
+            ],
+            [
+              28,
+              60
+            ],
+            [
+              28,
+              61
+            ],
+            [
+              27,
+              61
+            ],
+            [
+              27,
+              60
+            ]
+          ]
+        ]
+      ]
+    }
+  }
+]

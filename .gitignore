@@ -1,9 +1,44 @@
+# Local environments and Python/build output
 .venv/
-.env
+.repro/
+venv/
 __pycache__/
-*.pyc
+*.py[cod]
 .pytest_cache/
-.coverage
-htmlcov/
-runs/
 .ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Credentials and local configuration (only empty examples are public)
+.env
+.env.*
+!.env.example
+.streamlit/
+secrets/
+tokens/
+secrets.json
+tokens.json
+credentials.json
+*.pem
+*.key
+
+# Runtime/cache/report/traffic data, never public datasets
+runs/
+cache/
+.cache/
+live_data/
+raw_captures/
+*.jsonl
+openaip_cache*.json
+opensky_capture*.json
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
